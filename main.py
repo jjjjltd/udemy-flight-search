@@ -11,11 +11,11 @@ from dateutil.relativedelta import relativedelta
 
 #----------------------------  Constants  -------------------------------------------------------------------------------------------------------
 
-airport3 = input("Enter 3 letter code for where you want to go:")
-
+# airport3 = input("Enter 3 letter code for where you want to go:")
+airport3 = "BCN"
 
 today = datetime.today().strftime('%d/%m/%Y')
-six_months = datetime.today() + relativedelta(days=+2)
+six_months = datetime.today() + relativedelta(months=+6)
 six_months_later = six_months.strftime('%d/%m/%Y')
 flight_from = "LHR"
 
@@ -40,14 +40,14 @@ sheet_data = requests.get(SHEETY_URL)
 sheet_data.raise_for_status()
 
 flights = requests.get(FLIGHT_SEARCH_URL, params=FLIGHT_PARAMS, headers=headers)
-flights.raise_for_status
+flights.raise_for_status()
 
 # print(f"This is the JSON Parsed data: \n {r.json()}")
 # print(f"This is the flights data: \n {flights.json()}\n")
 
+
 # The return JSON has got a search id, with a list of data items per flight.  So...
 flights_json = json.loads(flights.text)
-
 # This makes a list of the flight data items only
 flight_data = flights_json['data']
 # print(type(flight_data))
@@ -74,6 +74,8 @@ for flight in flight_data:
         flight_details['cityTo'] = flight['cityTo']
         flight_details['countryTo'] = flight['countryTo']
         flight_details['route'] = flight['route']
+        flight_details['routeline'] = flight['route'][0]['airline']
     # print("")
 
 print(json.dumps(flight_details, indent=4))
+print(flight_details.keys)
